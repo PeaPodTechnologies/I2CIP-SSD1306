@@ -1,35 +1,9 @@
 #include <SSD1306.h>
 
-SSD1306::SSD1306(const i2cip_fqa_t& fqa, const i2cip_id_t& id) : I2CIP::Device(fqa, id), I2CIP::OutputInterface<uint8_t*, size_t>((I2CIP::Device*)this) { }
-SSD1306::SSD1306(const i2cip_fqa_t& fqa) : SSD1306(fqa, getStaticIDBuffer()) { }
+I2CIP_DEVICE_INIT_STATIC_ID(SSD1306);
+// I2CIP_DEVICES_INIT_PROGMEM_ID(SSD1306);
 
-I2CIP::Device* SSD1306::ssd1306Factory(const i2cip_fqa_t& fqa, const i2cip_id_t& id) {
-  return (I2CIP::Device*)(new SSD1306(fqa, id));
-}
-
-I2CIP::Device* SSD1306::ssd1306Factory(const i2cip_fqa_t& fqa) {
-  return ssd1306Factory(fqa, getStaticIDBuffer());
-}
-
-// i2cip_errorlevel_t clear(bool setbus = true) {
-//   return writeRegister((uint8_t)0x00, (uint8_t)0x00, setbus);
-// }
-
-// i2cip_errorlevel_t display(bool setbus = true) {
-//   return writeRegister((uint8_t)0x00, (uint8_t)0x01, setbus);
-// }
-
-// i2cip_errorlevel_t setContrast(uint8_t contrast, bool setbus = true) {
-//   return writeRegister((uint8_t)0x81, contrast, setbus);
-// }
-
-// i2cip_errorlevel_t setDisplayOn(bool setbus = true) {
-//   return writeRegister((uint8_t)0xAF, (uint8_t)0x00, setbus);
-// }
-
-// i2cip_errorlevel_t setDisplayOff(bool setbus = true) {
-//   return writeRegister((uint8_t)0xAE, (uint8_t)0x00, setbus);
-// }
+SSD1306::SSD1306(i2cip_fqa_t fqa, const i2cip_id_t& id) : I2CIP::Device(fqa, id), I2CIP::OutputInterface<uint8_t*, size_t>((I2CIP::Device*)this) { }
 
 i2cip_errorlevel_t SSD1306::set(uint8_t* const& buf, const size_t& len) {
   // i2cip_errorlevel_t errlev = setDisplayOff();
@@ -60,12 +34,4 @@ i2cip_errorlevel_t SSD1306::set(uint8_t* const& buf, const size_t& len) {
     I2CIP_ERR_BREAK(errlev);
   }
   return I2CIP::I2CIP_ERR_NONE;
-}
-
-const size_t& SSD1306::getDefaultB(void) const {
-  return _i2cip_ssd1306_size_default_bytes;
-}
-
-const char* SSD1306::getStaticIDBuffer() {
-  return "SSD1306";
 }

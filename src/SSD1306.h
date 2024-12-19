@@ -49,40 +49,18 @@
 
 const size_t _i2cip_ssd1306_size_default_bytes = (I2CIP_SSD1306_WIDTH * I2CIP_SSD1306_HEIGHT) / 8;
 
-class SSD1306 : public I2CIP::Device, public OutputInterface<uint8_t*, size_t> {
-public:
-  SSD1306(const i2cip_fqa_t& fqa, const i2cip_id_t& id);
-  SSD1306(const i2cip_fqa_t& fqa);
+// const char i2cip_ssd1306_id_progmem[] PROGMEM = {"SSD1306"};
 
-  static Device* ssd1306Factory(const i2cip_fqa_t& fqa, const i2cip_id_t& id);
+class SSD1306 : public I2CIP::Device, public I2CIP::OutputInterface<uint8_t*, size_t> {
+  I2CIP_DEVICE_CLASS_BUNDLE(SSD1306);
+  // private:
+    // SSD1306(i2cip_fqa_t fqa) : I2CIP::Device(fqa, i2cip_ssd1306_id_progmem, _id), I2CIP::OutputInterface<uint8_t*, size_t>((I2CIP::Device*)this) { }
+  public:
+    SSD1306(i2cip_fqa_t fqa, const i2cip_id_t& id);
 
-  static Device* ssd1306Factory(const i2cip_fqa_t& fqa);
+    i2cip_errorlevel_t set(uint8_t* const& buf, const size_t& len);
 
-  // i2cip_errorlevel_t clear(bool setbus = true) {
-  //   return writeRegister((uint8_t)0x00, (uint8_t)0x00, setbus);
-  // }
-
-  // i2cip_errorlevel_t display(bool setbus = true) {
-  //   return writeRegister((uint8_t)0x00, (uint8_t)0x01, setbus);
-  // }
-
-  // i2cip_errorlevel_t setContrast(uint8_t contrast, bool setbus = true) {
-  //   return writeRegister((uint8_t)0x81, contrast, setbus);
-  // }
-
-  // i2cip_errorlevel_t setDisplayOn(bool setbus = true) {
-  //   return writeRegister((uint8_t)0xAF, (uint8_t)0x00, setbus);
-  // }
-
-  // i2cip_errorlevel_t setDisplayOff(bool setbus = true) {
-  //   return writeRegister((uint8_t)0xAE, (uint8_t)0x00, setbus);
-  // }
-
-  i2cip_errorlevel_t set(uint8_t* const& buf, const size_t& len);
-
-  const size_t& getDefaultB(void) const override;
-
-  static const char* getStaticIDBuffer();
+    const size_t& getDefaultB(void) const override { return _i2cip_ssd1306_size_default_bytes; }
 };
 
 #endif
